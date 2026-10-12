@@ -93,6 +93,9 @@ export default function Studio() {
   const [tab, setTab] = useState<"edit" | "preview">("edit");
   const [showProblems, setShowProblems] = useState(false);
   const [notice, setNotice] = useState("");
+  // Decided once on mount, not re-derived every render: otherwise the panel would snap shut
+  // the instant the user types their first ICE digit, before they reach IF/address/RIB below.
+  const [sellerPanelOpen] = useState(() => !seller.ice);
 
   const current = invoices.find((i) => i.id === currentId) ?? null;
 
@@ -165,7 +168,7 @@ export default function Studio() {
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
         <aside className="no-print space-y-4">
-          <details className="rounded-lg bg-white p-3" open={!seller.ice}>
+          <details className="rounded-lg bg-white p-3" open={sellerPanelOpen}>
             <summary className="cursor-pointer font-semibold">Mon entreprise</summary>
             <div className="mt-3 space-y-3">
               <Field
